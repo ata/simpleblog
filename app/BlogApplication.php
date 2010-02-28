@@ -8,8 +8,11 @@ class BlogApplication extends Application
     protected function getUrlMapping()
     {
          return array(
+            '#/(?P<controller>\w+)/(?P<action>\w+)/(?P<id>\d+)#' => array(
+                'namespace' => 'BlogApplication\Controller',
+            ),
             '#/(?P<controller>\w+)/(?P<action>\w+)/#' => array(
-                'namespace' => 'BlogApplication\Controllers',
+                'namespace' => 'BlogApplication\Controller',
             ),
             '#/#' => array(
                 'namespace' => 'BlogApplication\Controller',
