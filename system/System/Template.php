@@ -6,21 +6,17 @@ class Template
     protected $path;
     protected $object;
     
-    public function __construct($path)
+    public function __construct($path,$object = null)
     {
         $this->path = $path;
+        $this->object = $object;
     }
-    public function render($object = null)
+    public function render()
     {
         extract(get_object_vars($this->object?:$this));
         ob_start();
         include $this->path;
         return ob_get_clean();
-    }
-    
-    public function setObject($object)
-    {
-        $this->object = $object;
     }
     
     public function display()

@@ -5,19 +5,16 @@ class BlogApplication extends Application
 {
    
     
-    protected function getUrlMapping()
+    protected function getUrlMappings()
     {
          return array(
-            '#/(?P<controller>\w+)/(?P<action>\w+)/(?P<id>\d+)#' => array(
+            '/:class/:method' => array(
                 'namespace' => 'BlogApplication\Controller',
             ),
-            '#/(?P<controller>\w+)/(?P<action>\w+)/#' => array(
+            '/' => array(
                 'namespace' => 'BlogApplication\Controller',
-            ),
-            '#/#' => array(
-                'namespace' => 'BlogApplication\Controller',
-                'controller' => 'Home',
-                'action' => 'index'
+                'class' => 'Home',
+                'method' => 'index'
             )
         );
     }
