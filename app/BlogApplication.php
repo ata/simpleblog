@@ -8,7 +8,7 @@ class BlogApplication extends Application
     protected function getUrlMappings()
     {
          return array(
-            '/:class/:method/:id' => array(
+            '/:class/:method/:id.html' => array(
                 '_namespace' => 'BlogApplication\Controller',
             ),
             '/:class/:method' => array(

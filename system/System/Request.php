@@ -20,7 +20,6 @@ class Request
     public function dispatcher()
     {
         foreach ($this->urlMappings as $pattern => $options) {
-            echo $this->toRegex($pattern) . "<br/>\n";
             if(preg_match($this->toRegex($pattern),$this->getUrl(),$match)){
                 $match = array_unique($match);
                 $url = $this->getUrl();
