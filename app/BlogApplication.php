@@ -19,10 +19,19 @@ class BlogApplication extends Application
         );
     }
     
-    protected function getLayout()
+    
+    protected function inject($responseObject)
+    {
+        $responseObject->app = $this;
+        $responseObject->request = $this->request;
+    }
+    
+    protected function getDefaultLayout()
     {
         return __DIR__ . '/BlogApplication/layout/main.php';
     }
+    
+    
     
 }
 

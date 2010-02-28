@@ -75,6 +75,10 @@ class Request
         return str_replace($this->getBaseUrl(),'',$_SERVER['REQUEST_URI']);
     }
     
+    public function getRequestUri()
+    {
+        return $this->getUrl();
+    }
     
     
     protected function classify($word)

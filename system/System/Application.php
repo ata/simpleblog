@@ -6,6 +6,7 @@ abstract class Application
 {
     protected $request;
     protected $responseObject;
+    protected $layout;
     public function __construct($request)
     {
         $this->request = $request;
@@ -18,6 +19,7 @@ abstract class Application
     protected function setup($class)
     {
         $this->responseObject = new $class;
+        $this->inject($this->responseObject);
     }
     
     
@@ -31,12 +33,18 @@ abstract class Application
     
     protected function render($responseObject)
     {
+        $this->defaultRender($responseObject);
+    }
+    
+    
+    protected function defaultRender($responseObject)
+    {
         $ref = new \ReflectionClass(get_class($responseObject));
         $path = str_replace('.php','/'. $this->request->getResponseMethod() 
                 . '.php' ,$ref->getFileName());
         if (file_exists($path)){
             $content = new Template($path,$responseObject);
-            $layout = new Template($this->getLayout());
+            $layout = new Template($this->layout?:$this->getDefaultLayout());
             $layout->content = $content;
             $layout->display();
             return true;
@@ -45,7 +53,13 @@ abstract class Application
         return false;
     }
     
+    public function setLayout($path)
+    {
+        $this->layout = $path;
+    }
+    
     abstract protected function getUrlMappings();
-    abstract protected function getLayout();
+    abstract protected function getDefaultLayout();
+    abstract protected function inject($responseObject);
     
 }
