@@ -20,6 +20,7 @@ class Request
     public function dispatcher()
     {
         foreach ($this->urlMappings as $pattern => $options) {
+            echo $this->toRegex($pattern) . "<br/>\n";
             if(preg_match($this->toRegex($pattern),$this->getUrl(),$match)){
                 $match = array_unique($match);
                 $url = $this->getUrl();
@@ -27,25 +28,25 @@ class Request
                     return $v != $url;
                 });
                 
-                if (isset($match['namespace'])){
-                    $namespace = $this->classify($match['namespace']);
-                    unset($match['namespace']);
+                if (isset($match['_namespace'])){
+                    $namespace = $this->classify($match['_namespace']);
+                    unset($match['_namespace']);
                 } else {
-                    $namespace = $this->classify($options['namespace']);
+                    $namespace = $this->classify($options['_namespace']);
                 }
                 
-                if (isset($match['class'])){
-                    $class = $this->classify($match['class']);
-                    unset($match['class']);
+                if (isset($match['_class'])){
+                    $class = $this->classify($match['_class']);
+                    unset($match['_class']);
                 } else {
-                    $class = $this->classify($options['class']);
+                    $class = $this->classify($options['_class']);
                 }
                 
-                if (isset($match['method'])){
-                    $method = $this->camelize($match['method']);
-                    unset($match['method']);
+                if (isset($match['_method'])){
+                    $method = $this->camelize($match['_method']);
+                    unset($match['_method']);
                 } else {
-                    $method = $this->camelize($options['method']);
+                    $method = $this->camelize($options['_method']);
                 }
                 
                 $this->responseClass = $namespace . '\\' . $this->prefixClass
@@ -53,6 +54,8 @@ class Request
                         
                 $this->responseMethod = $this->prefixMethod . $method 
                                         . $this->posfixMethod;
+                $this->responseParams = $match;
+                return true;
                 
             }
         }
@@ -100,7 +103,13 @@ class Request
      * convert '/:foo/:bar' to '#/(?P<foo>\w+)/(?P<bar>\w+)#'
      */
     private function toRegex($word){
-         return '#'.preg_replace('#\\\:(\w+)#','(?P<$1>\w+)',preg_quote($word)) .'#';
+        return '#'. preg_replace("#\\\:(\w+)#","(?P<_$1>\w+)",preg_quote($word)) .'#';
+        /*
+        preg_match_all('#\\\:(\w+)#',preg_quote($word),$match);
+        return str_replace($match[0],array_map(function($v){
+            return sprintf('(?P< %s >)',$v);
+        },$match[1]),preg_quote($word));
+        */
     }
     
     
