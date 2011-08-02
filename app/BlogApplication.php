@@ -12,8 +12,7 @@ class BlogApplication extends Application
                 '_namespace' => 'BlogApplication\Controller',
             ),
             '/:class/:method' => array(
-                '_namespace' => 'BlogApplication\Controller',// saya ubah yah
-                // eh ini punya ata
+                '_namespace' => 'BlogApplication\Controller',
             ),
             '/' => array(
                 '_namespace' => 'BlogApplication\Controller',
